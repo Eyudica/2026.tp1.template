@@ -80,7 +80,6 @@ public class Main {
                     }
 
                     // 2. Mostrar Préstamos Anteriores (Historial)
-                    // Nota: Asegúrate de tener el método getLoanHistory() en tu clase Customer
                     System.out.println("\n--- Previous Loans (History) ---");
                     if (customer.getPreviousLoans() == null || customer.getPreviousLoans().isEmpty()) {
                         System.out.println("No previous loan history found.");
@@ -199,7 +198,7 @@ public class Main {
         System.out.println("Customer registered!");
     }
 
-    private static void manageLoan(Scanner sc, LoanService service) throws Exception {
+    private static void manageLoan(Scanner sc, LoanService service) throws LibraryException {
         System.out.println("\n--- Loan Management ---");
         System.out.println("1 - Create New Loan");
         System.out.println("2 - Return Resource (Delete Loan)");
@@ -211,13 +210,18 @@ public class Main {
         int dni = sc.nextInt(); sc.nextLine();
         System.out.print("Resource ISBN: ");
         String isbn = sc.nextLine();
-        if (choice == 1) {
-            service.makeLoan(isbn, dni);
-            System.out.println("Success: loan registered");
-        } else if (choice == 2) {
-            service.deleteLoan(isbn, dni);
-        } else {
-            System.out.println("Invalid choice");
+        try {
+            if (choice == 1) {
+                service.makeLoan(isbn, dni);
+                System.out.println("Success: loan registered");
+            } else if (choice == 2) {
+                service.deleteLoan(isbn, dni);
+                System.out.println("Success: loan deleted");
+            } else {
+                System.out.println("Invalid choice");
+            }
+        } catch (LibraryException e) {
+            System.out.println("Error: " + e.getMessage());
         }
 
     }
