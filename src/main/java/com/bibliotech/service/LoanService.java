@@ -1,4 +1,5 @@
 package main.java.com.bibliotech.service;
+import main.java.com.bibliotech.exception.CustomerException;
 import main.java.com.bibliotech.model.Resource;
 import main.java.com.bibliotech.repository.Repository;
 import main.java.com.bibliotech.model.Book;
@@ -18,7 +19,7 @@ public class LoanService {
 
     public void makeLoan(String isbn, int customerDni) throws LibraryException {
         Resource resource = resourceRepo.searchById(isbn).orElseThrow(() -> new LibraryException("Book not found"));
-        Customer customer = customerRepo.searchById(customerDni).orElseThrow(() -> new LibraryException("Customer not found"));
+        Customer customer = customerRepo.searchById(customerDni).orElseThrow(() -> new CustomerException("Customer not found"));
 
 
         boolean alreadyHasIt = customer.getActiveLoans().stream()
@@ -43,8 +44,8 @@ public class LoanService {
 
 
     }
-    public void deleteLoan(String isbn, int customerDni) throws LibraryException {
-        Customer customer = customerRepo.searchById(customerDni).orElseThrow(() -> new LibraryException("Customer not found"));
+    public void deleteLoan(String isbn, int customerDni) throws LibraryException,CustomerException {
+        Customer customer = customerRepo.searchById(customerDni).orElseThrow(() -> new CustomerException("Customer not found"));
 
         Resource resource = resourceRepo.searchById(isbn).orElseThrow(() -> new LibraryException("Book not found"));
 
